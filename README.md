@@ -6,8 +6,8 @@ Hello, this README is basically useless for now since this repo is private, but 
 
 
 Plan:
-- [  ] Functional Code
-- [  ] Rough Documentation
-- [  ] Refactored Code
-- [  ] Full Documentation (Jupyter)
-- [  ] Overview
+- [ ] Functional Code
+- [ ] Rough Documentation
+- [ ] Refactored Code
+- [ ] Full Documentation (Jupyter)
+- [ ] Overview
