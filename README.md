@@ -1,4 +1,4 @@
-# Natural Language Processing
+# Natural Language
 ## Larry Moss
 
 
@@ -24,3 +24,18 @@ Some weird SageMath stuff and the equivalent in Python:
 > Sage to install. For example, SymPy might have most of
 > the required functionality. And maybe we need networkx
 > or igraph for some of the graph things. 
+
+
+
+
+
+
+
+
+### What the code does:
+Beginning code using `symbols()` initializes variables as symbolic variables.
+```python
+def ran(n):
+    return list(range(n))
+```
+
