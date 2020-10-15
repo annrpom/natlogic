@@ -34,8 +34,13 @@ Some weird SageMath stuff and the equivalent in Python:
 
 ### What the code does:
 Beginning code using `symbols()` initializes variables as symbolic variables.
+
 `ran()` creates a list of n elements, with items 0 to n-1.
+
 `class K` has 6 functions ....
+
 `isOdd` determines if n is odd
+
 `maxx` returns max of an iterable, if iterable is empty then returns 0-a safe `max()`
+
 `ssup` adds 1 to every element in the
