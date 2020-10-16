@@ -37,10 +37,14 @@ Beginning code using `symbols()` initializes variables as symbolic variables.
 
 `ran()` creates a list of n elements, with items 0 to n-1.
 
-`class K` has 6 functions ....
+`cmp_to_key`
 
 `isOdd` determines if n is odd
 
 `maxx` returns max of an iterable, if iterable is empty then returns 0-a safe `max()`
 
-`ssup` adds 1 to every element in the
+`ssup` adds 1 to every element in the given list and takes the max of it
+
+`last` returns the last element in a list
+
+
