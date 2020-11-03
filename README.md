@@ -1,4 +1,4 @@
-# Natural Language
+# Natural Logic
 ## Larry Moss
 
 
