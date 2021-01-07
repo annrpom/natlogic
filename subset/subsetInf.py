@@ -47,14 +47,17 @@ class ProofTree:
     # this will be for printing and keeping track of things
     def follow_previous(self):
         encountered = []
-        if self.parents is None:
+        if self is None or self.parents is None:
             print("", end='')
         else:
             for pt in self.parents:
-                pt.follow_previous()
-                print(pt.get_tf(), end=' ')
-            print(self.rule, "w/ concl:", self.get_tf())
-
+                encountered.append(pt.follow_previous())
+            encountered.append(self.parent_strings() + " " + self.rule + " w/ concl: " + str(self.get_tf()))
+        for pt in encountered:
+            if pt is None:
+                print("", end='')
+            else:
+                print(pt)
 
 # class represents inference rule
 class Rule:
@@ -97,7 +100,12 @@ class Rule:
     # returns the possible TagFacts that can be generated from Database
     def apply(self, database):
         if len(self.premises) == 0:  # axiom, only rule w empty premise list
-            return [ProofTree('a', n, n) for n in database.universe]
+            ret = []
+            for n in database.universe:
+                pt = ProofTree('a', n, n)
+                pt.set_rule(self.name)
+                ret.append(pt)
+            return ret
         else:
             my_dict = {}
             tfl = []
