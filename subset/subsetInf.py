@@ -45,19 +45,33 @@ class ProofTree:
     # follow_previous: self
     # returns a list of the statements used to get to curr statement, if any
     # this will be for printing and keeping track of things
-    def follow_previous(self):
+    def follow_previous_helper(self):
         encountered = []
         if self is None or self.parents is None:
             print("", end='')
         else:
             for pt in self.parents:
-                encountered.append(pt.follow_previous())
+                encountered.append(pt.follow_previous_helper())
             encountered.append(self.parent_strings() + " " + self.rule + " w/ concl: " + str(self.get_tf()))
+        return encountered
+
+    def follow_previous(self):
+        encountered = self.follow_previous_helper()
+        i = 0
         for pt in encountered:
-            if pt is None:
+            if pt is None or not pt:
                 print("", end='')
             else:
-                print(pt)
+                i += 1
+                print(str(i), end=' ')
+                if isinstance(pt, str):
+                    print(pt)
+                else:
+                    for item in pt:
+                        if not item:
+                            print("", end='')
+                        else:
+                            print(item)
 
 # class represents inference rule
 class Rule:
@@ -175,9 +189,9 @@ class Engine:
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
     def gen_tf(self):
         while True:
-            print("engine size", self.size, "datasize", self.database.size())
+            # print("engine size", self.size, "datasize", self.database.size())
             self.size = self.database.size()
-            print("after revision", "engine size", self.size, "datasize", self.database.size(), "these will be equal")
+            # print("after revision", "engine size", self.size, "datasize", self.database.size(), "these will be equal")
             for rule in self.rules:
                 generated = rule.apply(self.database)  # this produces a [ListOf ProofTrees]
                 no_dupes = []
@@ -186,7 +200,7 @@ class Engine:
                         no_dupes.append(pt)
                 self.database.prooftrees += no_dupes
                 if self.database.contain(self.target):
-                    print("DOES THIS EVER WORK")
+                    # print("DOES THIS EVER WORK")
                     return self.database.get_tag(self.target)
             if self.size == self.database.size():
                 print("nothing was found")

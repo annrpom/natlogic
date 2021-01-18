@@ -6,6 +6,12 @@ axiom = Rule('axiom', [], ('a', 'x', 'x'))
 junk = Rule('junk', [('e', 'x', 'y'), ('e', 'y', 'x'), ('o', 'y', 'x')], ('u', 'x', 'y'))
 rules = [barbara, darii, axiom, junk]
 
+swap = Rule('swap', [('a', 'x', 'y')], ('s', 'y', 'x'))
+most = Rule('most', [('m', 'x', 'y'), ('a', 'y', 'z')], ('m', 'x', 'z'))
+no2 = Rule('no2', [('o', 'x', 'x')], ('a', 'x', 'y'))
+premaj = Rule('pre-Maj', [('b', 'x', 'y'), ('c', 'x', 'y'), ('d', 'x', 'x')], ('b', 'y', 'x'))
+
+
 universe = [x for x in range(5)]
 t1 = ProofTree('a', 0, 2)
 t2 = ProofTree('a', 2, 3)
@@ -20,13 +26,18 @@ prooftrees = [t1, t2, t3, t4, t5, t6,t7]
 database = Database(universe, prooftrees)
 
 target = ProofTree('i', 3, 3)
-
 engine = Engine(rules, database, target)
-
 ans = engine.gen_tf()
 print(ans)
 print("THIS IS THE PRINT")
 print(ans.follow_previous())
+
+print()
+print("changing the target so cannot be found")
+target = ('y', 1, 2)
+engine = Engine(rules, database, target)
+ans = engine.gen_tf()
+print(ans)
 
 print()
 print("for another example")

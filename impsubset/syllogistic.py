@@ -35,7 +35,7 @@ for num in range(i):
     extraction[num + i] = "non-" + var
 
 tf = []
-universe = [x for x in range(len(extraction)+1)]
+universe = [x for x in range(len(extraction) + 1)]
 lop.add(target)
 for prem in lop:
     tag, w1, w2 = prem.split()
@@ -55,10 +55,6 @@ lop.remove(target)
 
 database = Database(universe, tf)
 engine = Engine(rules, database, ttarget)
-ans = engine.gen_tf()
-
-
-
-
+engine.gen_tf()
 
 
