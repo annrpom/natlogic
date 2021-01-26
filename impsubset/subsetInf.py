@@ -83,7 +83,8 @@ class Database:
         self.universe = universe
         self.lot = lot
         for tf in lot:
-            ans[tf] = None
+            if tf not in ans.keys():
+                ans[tf] = None
 
     def size(self):
         return len(self.lot)
@@ -135,6 +136,17 @@ class Engine:
                     return
             if self.size == self.database.size():
                 print("Nothing was found")
+                break
+        ans.clear()
+
+    def provable_tf(self):
+        while True:
+            self.size = self.database.size()
+            for rule in self.rules:
+                gen = rule.apply(self.database)
+                self.database.lot.update(gen)
+            if self.size == self.database.size():
+                print(ans)
                 break
 
 # need to find the final result from this calculation
