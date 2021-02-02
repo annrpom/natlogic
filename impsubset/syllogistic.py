@@ -1,14 +1,6 @@
 from subsetInf import *
 
-
-class N:
-    def __init__(self, variable):
-        sign = "neg"
-        if type(variable) is tuple:
-            if variable[1] == "neg":
-                sign = "pos"
-        self.variable = (variable, sign)
-
+# if i could make a change - change rule to abstract class and have NRule and regRule stem from it
 
 axiom = Rule('axiom', [], ('a', 'x', 'x'))
 barbara = Rule('barbara', [('a', 'x', 'y'), ('a', 'y', 'z')], ('a', 'x', 'z'))
@@ -19,7 +11,7 @@ zero = Rule('zero', [('a', 'x', N('x'))], ('a', 'x', 'y'))
 one = Rule('one', [('a', N('x'), 'x')], ('a', 'y', 'x'))
 anti = Rule('anti', [('a', 'x', 'y')], ('a', N('y'), N('x')))
 x = Rule('x', [('a', 'x', 'y'), ('i', N('x'), 'y')], any)
-rules = [axiom, barbara, darii, some1, some2]
+rules = [axiom, barbara, darii, some1, some2, one, zero]
 
 print("Please enter your list of premises. Press tab when finished.")
 print("These should be in the form all _ _, some _ _, or no _ _")
@@ -51,7 +43,7 @@ for item in nons:
     extraction[i] = item
     i += 1
 tf = []
-universe = [x for x in range(len(extraction) + 1)]
+universe = [x for x in range(len(extraction))]
 for prem in lop:
     tag, w1, w2 = prem.split()
     ind1 = [ind for ind, word in extraction.items() if word == w1]

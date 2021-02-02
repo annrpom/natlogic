@@ -48,7 +48,7 @@ class Rule:
         if len(self.premises) == 0:  # axiom, only rule w empty premise list
             tfl = [('a', n, n) for n in database.universe]
             for item in tfl:
-                ans[item] = ("axiom", "Database")
+                ans[item] = ("axiom", [])
             return tfl
         else:
             tfl = []
@@ -57,16 +57,33 @@ class Rule:
                 for tf, ptf in zip(poss, self.premises):
                     t, v1, v2 = tf
                     pt, pv1, pv2 = ptf
-                    if t != pt:
-                        break
-                    if pv1 in my_dict:
-                        if my_dict[pv1] != v1:
+                    if isinstance(pv1, N):  # for our rule one
+                        nx = N(v2)
+                        nx.negate(len(database.universe))
+                        if nx.val == v1:
+                            for i in database.universe:
+                                child_pt = (t, i, v2)
+                                ans[child_pt] = (self.name, [])
+                                tfl.append(child_pt)
+                    elif isinstance(pv2, N):
+                        nx = N(v1)
+                        nx.negate(len(database.universe))
+                        if nx.val == v2:
+                            for i in database.universe:
+                                child_pt = (t, v1, i)
+                                ans[child_pt] = (self.name, [])
+                                tfl.append(child_pt)
+                    else:
+                        if t != pt:
                             break
-                    if pv2 in my_dict:
-                        if my_dict[pv2] != v2:
-                            break
-                    my_dict[pv1] = v1
-                    my_dict[pv2] = v2
+                        if pv1 in my_dict:
+                            if my_dict[pv1] != v1:
+                                break
+                        if pv2 in my_dict:
+                            if my_dict[pv2] != v2:
+                                break
+                        my_dict[pv1] = v1
+                        my_dict[pv2] = v2
                 else:
                     if len(my_dict) == len(self.valid_vars()):
                         t, v1, v2 = self.conclusion
@@ -75,6 +92,14 @@ class Rule:
                             ans[child_pt] = (self.name, poss)
                         tfl.append(child_pt)
             return tfl
+
+
+class N:
+    def __init__(self, val):
+        self.val = val
+
+    def negate(self, setsize):
+        self.val = (self.val + setsize / 2) % setsize
 
 
 # class represents database: universe and set of tagfacts
@@ -146,7 +171,13 @@ class Engine:
                 gen = rule.apply(self.database)
                 self.database.lot.update(gen)
             if self.size == self.database.size():
-                print(ans)
+                for item in ans.keys():
+                    if ans[item] is None:
+                        print("", end='')
+                    else:
+                        for val in ans[item][1]:
+                            print(val)
+                        print(item)
                 break
 
 # need to find the final result from this calculation
