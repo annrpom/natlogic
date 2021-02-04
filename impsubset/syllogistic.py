@@ -55,8 +55,15 @@ for prem in lop:
 
 database = Database(universe, set(tf))
 engine = Engine(rules, database, None)
-engine.provable_tf()
+provables = engine.provable_tf()
+for tf in provables:
+    t, v1, v2 = tf
+    nv1 = extraction[v1]
+    nv2 = extraction[v2]
+    print((t, nv1, nv2))
+print()
 
+# have to fix by maintaining condition that target is in dict, double check w rules
 # code pertaining to translating the target
 target = input("Enter a target\n")
 ttag, tw1, tw2 = target.split()

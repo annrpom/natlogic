@@ -141,11 +141,19 @@ class Engine:
         lop = self.gen_proof(self.target)
         lop.reverse()
         i = 1
+        nums_used = []
         for item in lop:
             print(i, end=' ')
             res, parent = item
             rule, tf = parent
-            print(str(tf) + " uses " + rule, "and produces conclusion: " + str(res))
+            tf = list(tf)
+            for item in tf:
+                nums_used.append(i)
+                print(item)
+                i += 1
+                print(i, end=' ')
+            print(str(res) + " uses " + rule + " from applications of " + str(nums_used))
+            nums_used = []
             i += 1
 
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
@@ -165,6 +173,7 @@ class Engine:
         ans.clear()
 
     def provable_tf(self):
+        provables = []
         while True:
             self.size = self.database.size()
             for rule in self.rules:
@@ -173,15 +182,10 @@ class Engine:
             if self.size == self.database.size():
                 for item in ans.keys():
                     if ans[item] is None:
-                        print("", end='')
+                        provables + []
                     else:
                         for val in ans[item][1]:
-                            print(val)
-                        print(item)
-                break
+                            provables.append(val)
+                        provables.append(item)
+                return provables
 
-# need to find the final result from this calculation
-
-# user will input list of rules, database, and target
-# we want to be able to output tree or list showing all the possible
-# rule applications

@@ -144,6 +144,8 @@
       <workItem from="1612244063531" duration="92000" />
       <workItem from="1612244164374" duration="11000" />
       <workItem from="1612298869046" duration="4537000" />
+      <workItem from="1612311192427" duration="146000" />
+      <workItem from="1612463115435" duration="4652000" />
     </task>
     <servers />
   </component>
@@ -156,6 +158,6 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/impsubset$main.coverage" NAME="main Coverage Results" MODIFIED="1611679238478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/impsubset$subsetInf.coverage" NAME="subsetInf Coverage Results" MODIFIED="1610857711219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/impsubset$syllogistic.coverage" NAME="syllogistic Coverage Results" MODIFIED="1612309069056" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/impsubset$syllogistic.coverage" NAME="syllogistic Coverage Results" MODIFIED="1612468781789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
