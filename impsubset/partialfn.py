@@ -1,8 +1,32 @@
 from subsetInf import *
+import re
 
 
-class Pfn:
+class R:
+    def __init__(self, term):
+        los = [term]
+        curr = term
+        while True:
+            try:
+                inner = re.search('\(([^)]+)', curr).group(1)
+                # can use list - will have to rewrite
+                if len(inner) > 1:
+                    los.append(inner+")")
+                else:
+                    los.append(inner)
+                curr = inner
+            except AttributeError:
+                break
+        i = 0
+        subterms = {}
+        for t in los:
+            subterms[i] = t
+            i += 1
+        self.subterms = subterms
 
-    def __init__(self, fn):
-        if fn == "f":
-            self.fn = {0: 1, 1: 0, 3: 2, 5: 4}
+        # throw "error" at end of dict
+
+        # make fn
+
+
+

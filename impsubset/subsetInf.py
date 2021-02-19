@@ -73,6 +73,14 @@ class Rule:
                                 child_pt = (t, v1, i)
                                 ans[child_pt] = (self.name, [])
                                 tfl.append(child_pt)
+                    elif self.name == 'anti':
+                        nx = N(v1)
+                        ny = N(v2)
+                        nx.negate(len(database.universe))
+                        ny.negate(len(database.universe))
+                        child_pt = (t, ny.val, nx.val)
+                        ans[child_pt] = (self.name, [])
+                        tfl.append(child_pt)
                     else:
                         if t != pt:
                             break
@@ -137,7 +145,7 @@ class Engine:
         else:
             return []
 
-    def print_proof(self):
+    def print_proof(self, myDict):
         lop = self.gen_proof(self.target)
         lop.reverse()
         i = 1
@@ -149,15 +157,26 @@ class Engine:
             tf = list(tf)
             for item in tf:
                 nums_used.append(i)
-                print(item)
+                t, v1, v2 = item
+                translated = (t, myDict[v1], myDict[v2])
+                print(translated, "given")
                 i += 1
                 print(i, end=' ')
-            print(str(res) + " uses " + rule + " from applications of " + str(nums_used))
+            t, v1, v2 = res
+            tv1 = myDict[v1]
+            tv2 = myDict[v2]
+            english = ""
+            if t == 'a':
+                english += "all "
+            if t == 's':
+                english += "some "
+            english = english + tv1 + " are " + tv2
+            print(english + " uses " + rule + " from applications of " + str(nums_used))
             nums_used = []
             i += 1
 
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
-    def gen_tf(self):
+    def gen_tf(self, myDict):
         while True:
             self.size = self.database.size()
             for rule in self.rules:
@@ -165,7 +184,7 @@ class Engine:
                 self.database.lot.update(generated)
                 if self.target in ans.keys():
                     print("Proof was found!")
-                    self.print_proof()
+                    self.print_proof(myDict)
                     return
             if self.size == self.database.size():
                 print("Nothing was found")
@@ -182,7 +201,7 @@ class Engine:
             if self.size == self.database.size():
                 for item in ans.keys():
                     if ans[item] is None:
-                        provables + []
+                        pass
                     else:
                         for val in ans[item][1]:
                             provables.append(val)

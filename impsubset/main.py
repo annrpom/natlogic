@@ -1,4 +1,5 @@
 from subsetInf import *
+from partialfn import *
 
 barbara = Rule('barbara', [('a', 'x', 'y'), ('a', 'y', 'z')], ('a', 'x', 'z'))
 darii = Rule('darii', [('a', 'x', 'y'), ('i', 'x', 'z')], ('i', 'y', 'z'))
@@ -18,21 +19,18 @@ tagfacts = [t1, t2, t3, t4, t5, t6, t7]
 database = Database(universe, set(tagfacts))
 target = ('i', 3, 3)
 engine = Engine(rules, database, target)
-engine.gen_tf()
 
 print()
 print("for another example")
 # this is to make axiom works the way we want it to
 target = ('a', 4, 4)
 engine = Engine(rules, database, target)
-engine.gen_tf()
 
 print()
 print("another one")
 # should not be found
 target = ('y', 1, 2)
 engine = Engine(rules, database, target)
-engine.gen_tf()
 
 print()
 print("another simple example")
@@ -44,7 +42,6 @@ tagfacts = [t1, t2, t3]
 database = Database(universe, set(tagfacts))
 target = ('u', 2, 4)
 engine = Engine(rules, database, target)
-engine.gen_tf()
 
 print()
 print("a more complex example")
@@ -56,7 +53,6 @@ tagfacts = [t1, t2, t3, t4]
 database = Database(universe, set(tagfacts))
 target = ('i', 1, 2)
 engine = Engine(rules, database, target)
-engine.gen_tf()
 
 print()
 t1 = ('a', 0, 1)
@@ -67,4 +63,15 @@ tagfacts = [t1, t2, t3, t4]
 database = Database(universe, set(tagfacts))
 target = ('a', 0, 4)
 engine = Engine(rules, database, target)
-engine.gen_tf()
+
+print("hello")
+test = R("see-a(like-a(x))")
+print(test.subterms)
+
+print("hello")
+test = R("see-a(see-a(like-a(x)))")
+print(test.subterms)
+
+
+
+
