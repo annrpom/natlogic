@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ace7a17-e239-40cc-9aa7-ac18a2c26859" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/relational.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/partialfn.py" beforeDir="false" afterPath="$PROJECT_DIR$/partialfn.py" afterDir="false" />
@@ -50,7 +49,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.syllogistic">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="impsubset" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -156,7 +155,8 @@
       <workItem from="1612463115435" duration="4764000" />
       <workItem from="1612492598187" duration="19000" />
       <workItem from="1612843240400" duration="8834000" />
-      <workItem from="1613753601481" duration="7288000" />
+      <workItem from="1613753601481" duration="8114000" />
+      <workItem from="1614030221896" duration="9414000" />
     </task>
     <servers />
   </component>
@@ -176,10 +176,11 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/impsubset$main.coverage" NAME="main Coverage Results" MODIFIED="1613766936372" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/impsubset$main.coverage" NAME="main Coverage Results" MODIFIED="1614094509940" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/impsubset$subsetInf.coverage" NAME="subsetInf Coverage Results" MODIFIED="1610857711219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/impsubset$syllogistic.coverage" NAME="syllogistic Coverage Results" MODIFIED="1613766681987" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/impsubset$syllogistic.coverage" NAME="syllogistic Coverage Results" MODIFIED="1614095279076" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

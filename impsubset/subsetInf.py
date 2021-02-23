@@ -12,6 +12,9 @@ class Rule:
         self.premises = premises
         self.conclusion = conclusion
 
+    def __str__(self):
+        return self.name + " with premises " + str(self.premises) + " and conclusion " + str(self.conclusion)
+
     # valid_tags: self -> [SetOf Chars]
     # returns the set of all tags that occur in the premise
     def valid_tags(self):
