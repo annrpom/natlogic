@@ -1,4 +1,5 @@
 import itertools
+from text_image import *
 
 # this is the dictionary that keeps track of the proofs
 ans = {}
@@ -177,6 +178,29 @@ class Engine:
             print(english + " uses " + rule + " from applications of " + str(nums_used))
             nums_used = []
             i += 1
+
+    # (U None TagFacts) (Dict Num String) -> String
+    def pretty_print(self, myDict):
+        def nodeStr(node):
+            tag    = "All " if node[0] == 'a' else "I "
+            first  = myDict[node[1]] if isinstance(node[1],int) else node[1]
+            second = myDict[node[2]] if isinstance(node[2],int) else node[2]
+            return tag + first + " " + second
+        def pretty_print_internal(node):
+            rec      = ans[node]
+            rule     = "given" if not rec else rec[0]
+            parents  = [] if not rec else rec[1]
+            subtrees = TextImage("")
+            nodeStrg = nodeStr(node)
+            for parent in parents:
+                subtrees = subtrees.beside(pretty_print_internal(parent), 2)
+            if(subtrees.width > len(nodeStrg)):
+                bar_rule = "-" * (subtrees.width + 2)
+                return subtrees.aboveStr(bar_rule).beside(TextImage([rule]),1).aboveStr(nodeStrg)
+            else:
+                bar_rule = "-" * (len(nodeStrg) + 2)
+                return subtrees.above(TextImage(bar_rule).aboveStr(nodeStrg).beside(TextImage([rule,""]), 1))
+        return str(pretty_print_internal(self.target))
 
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
     def gen_tf(self, myDict):
