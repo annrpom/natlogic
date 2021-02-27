@@ -179,7 +179,7 @@ class Engine:
             nums_used = []
             i += 1
 
-    # (U None TagFacts) (Dict Num String) -> String
+    # (Dict Num String) -> String
     def pretty_print(self, myDict):
         def nodeStr(node):
             tag    = "All " if node[0] == 'a' else "I "
@@ -194,6 +194,10 @@ class Engine:
             nodeStrg = nodeStr(node)
             for parent in parents:
                 subtrees = subtrees.beside(pretty_print_internal(parent), 2)
+            # ---- bar needs to be big enough to under/overline the bigger among:
+            # * the root
+            # * the sub-proofs
+            # so, need a tiny `if` to make this look pretty
             if(subtrees.width > len(nodeStrg)):
                 bar_rule = "-" * (subtrees.width + 2)
                 return subtrees.aboveStr(bar_rule).beside(TextImage([rule]),1).aboveStr(nodeStrg)
