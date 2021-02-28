@@ -17,14 +17,14 @@ class TextImage:
     # By default, TextImages are aligned at the bottom since that's
     # useful in this project's case
     def beside(self,image,gapBw=0):
-        userGap = gapBw * " "
+        userGap  = gapBw * " "
         leftGap  = (" " * self.width) + userGap
-        rightGap  = userGap + (" " * image.width)
+        rightGap = userGap + (" " * image.width)
         if(len(self.strs) == 0):
             return TextImage(image.strs)
         if(len(image.strs) == 0):
             return TextImage(self.strs)
-        newArr  = [""] * max(self.height, image.height)
+        newArr = [""] * max(self.height, image.height)
         smaller,bigger,fix = None,None,None
         if self.height < image.height: 
             fix     = lambda x: leftGap + x
@@ -34,19 +34,19 @@ class TextImage:
             fix     = lambda x: x + rightGap
             bigger  = self.strs
             smaller = image.strs
-        i  = len(newArr)  - 1
+        ix = len(newArr)  - 1
         lx = self.height  - 1
         rx = image.height - 1
         for _ in range(len(smaller)):
             leftStr   = self.strs[lx] 
             rightStr  = image.strs[rx] 
-            newArr[i] = leftStr + userGap + rightStr
-            i-=1
+            newArr[ix] = leftStr + userGap + rightStr
+            ix-=1
             lx-=1
             rx-=1
         for j in range(len(bigger) - len(smaller)-1,-1,-1):
-            newArr[i] = fix(bigger[j])
-            i-=1
+            newArr[ix] = fix(bigger[j])
+            ix-=1
         return TextImage(newArr)
     
     # TextImage -> TextImage
