@@ -1,4 +1,6 @@
 import itertools
+from partialfn import *
+from rules import *
 
 # this is the dictionary that keeps track of the proofs
 ans = {}
@@ -45,14 +47,24 @@ class Rule:
         lim = len(self.premises)  # this is the lim for the inner list of tf
         return itertools.product(poss_tf, repeat=lim)
 
+    # determines if rule is a partial function
+    def pf_huh(self):
+        result = False
+        for phi in self.premises:
+            for item in phi:
+                if isinstance(item, R):
+                    result = True
+        for item in self.conclusion:
+            if isinstance(item, R):
+                result = True
+        return result
+
     # apply : Database -> [ListOf TagFacts]
     # returns the possible TagFacts that can be generated from Database
+    # abstract usage of N and R for the partialfn part
     def apply(self, database):
-        if len(self.premises) == 0:  # axiom, only rule w empty premise list
-            tfl = [('a', n, n) for n in database.universe]
-            for item in tfl:
-                ans[item] = ("axiom", [])
-            return tfl
+        if self.name == "axiom":  # axiom, only rule w empty premise list
+            return axiom(database)
         else:
             tfl = []
             for poss in self.combs(self.possibilities(database)):
@@ -60,41 +72,21 @@ class Rule:
                 for tf, ptf in zip(poss, self.premises):
                     t, v1, v2 = tf
                     pt, pv1, pv2 = ptf
-                    if isinstance(pv1, N):  # for our rule one
-                        nx = N(v2)
-                        nx.negate(len(database.universe))
-                        if nx.val == v1:
-                            for i in database.universe:
-                                child_pt = (t, i, v2)
-                                ans[child_pt] = (self.name, [])
-                                tfl.append(child_pt)
-                    elif isinstance(pv2, N):
-                        nx = N(v1)
-                        nx.negate(len(database.universe))
-                        if nx.val == v2:
-                            for i in database.universe:
-                                child_pt = (t, v1, i)
-                                ans[child_pt] = (self.name, [])
-                                tfl.append(child_pt)
+                    if self.pf_huh():
+                        partfn(database, tf, ptf, tfl)
                     elif self.name == 'anti':
-                        nx = N(v1)
-                        ny = N(v2)
-                        nx.negate(len(database.universe))
-                        ny.negate(len(database.universe))
-                        child_pt = (t, ny.val, nx.val)
-                        ans[child_pt] = (self.name, [])
-                        tfl.append(child_pt)
+                        anti(database, tf, ptf, tfl)
                     else:
                         if t != pt:
                             break
-                        if pv1 in my_dict:
-                            if my_dict[pv1] != v1:
-                                break
-                        if pv2 in my_dict:
-                            if my_dict[pv2] != v2:
-                                break
-                        my_dict[pv1] = v1
-                        my_dict[pv2] = v2
+                    if pv1 in my_dict:
+                        if my_dict[pv1] != v1:
+                            break
+                    if pv2 in my_dict:
+                        if my_dict[pv2] != v2:
+                            break
+                    my_dict[pv1] = v1
+                    my_dict[pv2] = v2
                 else:
                     if len(my_dict) == len(self.valid_vars()):
                         t, v1, v2 = self.conclusion
@@ -103,14 +95,6 @@ class Rule:
                             ans[child_pt] = (self.name, poss)
                         tfl.append(child_pt)
             return tfl
-
-
-class N:
-    def __init__(self, val):
-        self.val = val
-
-    def negate(self, setsize):
-        self.val = (self.val + setsize / 2) % setsize
 
 
 # class represents database: universe and set of tagfacts
@@ -161,8 +145,12 @@ class Engine:
             for item in tf:
                 nums_used.append(i)
                 t, v1, v2 = item
-                translated = (t, myDict[v1], myDict[v2])
-                print(translated, "given")
+                if t == 'a':
+                    t = "all "
+                if t == 's':
+                    t = "some "
+                translated = t + myDict[v1] + " are " + myDict[v2]
+                print(translated, "-- given")
                 i += 1
                 print(i, end=' ')
             t, v1, v2 = res
@@ -188,6 +176,7 @@ class Engine:
                 if self.target in ans.keys():
                     print("Proof was found!")
                     self.print_proof(myDict)
+                    ans.clear()
                     return
             if self.size == self.database.size():
                 print("Nothing was found")
@@ -210,4 +199,3 @@ class Engine:
                             provables.append(val)
                         provables.append(item)
                 return provables
-

@@ -1,4 +1,5 @@
 from subsetInf import *
+from partialfn import *
 
 # if i could make a change - change rule to abstract class and have NRule and regRule stem from it
 
@@ -7,22 +8,25 @@ barbara = Rule('barbara', [('a', 'x', 'y'), ('a', 'y', 'z')], ('a', 'x', 'z'))
 darii = Rule('darii', [('a', 'x', 'y'), ('i', 'x', 'z')], ('i', 'y', 'z'))
 some1 = Rule('some1', [('i', 'x', 'y')], ('i', 'x', 'x'))
 some2 = Rule('some2', [('i', 'x', 'y')], ('i', 'y', 'x'))
-zero = Rule('zero', [('a', 'x', N('x'))], ('a', 'x', 'y'))
-one = Rule('one', [('a', N('x'), 'x')], ('a', 'y', 'x'))
-anti = Rule('anti', [('a', 'x', 'y')], ('a', N('y'), N('x')))
-x = Rule('x', [('a', 'x', 'y'), ('i', N('x'), 'y')], any)
-lor = [axiom, barbara, darii, some1, some2, one, zero, anti, x]
-
+zero = Rule('zero', [('a', 'x', N('x'))], ('a', 'x', 'y'))  # states in orthoposet
+one = Rule('one', [('a', N('x'), 'x')], ('a', 'y', 'x'))  # states in orthoposet
+anti = Rule('anti', [('a', 'x', 'y')], ('a', R('y'), R('x')))
+x = Rule('x', [('a', 'x', 'y'), ('i', R('x'), 'y')], "any")
+down = Rule('down', [('a', 'x', R('y')), ('a', 'z', 'y')], ('a', 'x', R('z')))
+lor = [axiom, barbara, darii, some1, some2, one, zero, anti, x, down]
+# gen of rules for user made up
 print("Hello. Welcome to the syllogistic inference evaluator.")
 print("Examples are coming soon THEY WILL BE GENERATED HERE")
 print("-".join("-" * 10))
 print("Below are a list of rules to choose from, please type in which rules you would like this engine to have.")
 print("(Put these on one line, separated by commas. Press enter when finished.)\n")
-print(str(axiom) + "\n" + str(barbara) + "\n" + str(darii) + "\n" + str(some1))
+print(str(axiom) + "\n" + str(barbara) + "\n" + str(darii) + "\n" + str(some1) + "\n" + str(down))
 print(str(some2) + "\n" + str(zero) + "\n" + str(one) + "\n" + str(anti) + "\n" + str(x) + "\n")
+# rule selection string match
 ulor = input("Enter choices below:\n")
 ulor = ulor.split(", ")
 rules = []
+meaning = {}
 for rule in ulor:
     for setrule in lor:
         if rule == setrule.name:
@@ -30,6 +34,7 @@ for rule in ulor:
 print("Please enter your list of premises. Press tab when finished.")
 print("These should be in the form all _ are _ OR some _ are _")
 lop = []
+verbs = []
 while True:
     prem = input("Enter a premise and then hit ENTER or just press ENTER if finished\n")
     if prem == '':
@@ -63,9 +68,10 @@ for prem in lop:
     ind1 = [ind for ind, word in extraction.items() if word == w1]
     ind2 = [ind for ind, word in extraction.items() if word == w2]
     if tag == "all":
-        tf.append(('a', ind1[0], ind2[0]))
+        tag = 'a'
     elif tag == "some":
-        tf.append(('i', ind1[0], ind2[0]))
+        tag = 'i'
+    tf.append((tag, ind1[0], ind2[0]))
 
 database = Database(universe, set(tf))
 engine = Engine(rules, database, None)
@@ -74,7 +80,11 @@ for tf in provables:
     t, v1, v2 = tf
     nv1 = extraction[v1]
     nv2 = extraction[v2]
-    print((t, nv1, nv2))
+    if t == 'a':
+        t = "all "
+    elif t == "i":
+        t = "some "
+    print(t + nv1 + " are " + nv2)
 print()
 
 # have to fix by maintaining condition that target is in dict, double check w rules
