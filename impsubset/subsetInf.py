@@ -79,10 +79,19 @@ class Rule:
                             else:
                                 my_dict[pv1] = v1
                                 if pv2 in my_dict:
-                                    if v2 == my_dict[pv2]:
-                                        tbl = table(database.lov, database.meaning)
-                                        v = verb(v2, tbl)
+                                    tbl = table(database.lov, database.meaning)
+                                    v = verb(v2, tbl)
+                                    if change(v, v2, tbl) == my_dict[pv2]:
                                         my_dict['z'] = change(v, v1, tbl)
+                                        child_pt = (t, my_dict['x'], my_dict['z'])
+                                        if child_pt not in ans.keys():
+                                            ans[child_pt] = (self.name, poss)
+                                        tfl.append(child_pt)
+                                        break
+                                    else:
+                                        break
+                                else:
+                                    break
                         else:
                             break
                     elif self.name == 'anti':

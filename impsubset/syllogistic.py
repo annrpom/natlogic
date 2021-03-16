@@ -18,6 +18,7 @@ lor = [axiom, barbara, darii, some1, some2, one, zero, anti, x, down]
 # gen of rules for user made up
 print("Hello. Welcome to the syllogistic inference evaluator.")
 print("Examples are coming soon THEY WILL BE GENERATED HERE")
+print("")
 print("-".join("-" * 10))
 print("Below are a list of rules to choose from, please type in which rules you would like this engine to have.")
 print("(Put these on one line, separated by commas. Press enter when finished.)\n")
@@ -81,8 +82,11 @@ for v in verbs:
     sub = [v + "(" + var + ")" for var in meaning.values()]
     relatives += sub
 for item in relatives:
-    meaning[i] = item
-    i += 1
+    if item in meaning.values():
+        pass
+    else:
+        meaning[i] = item
+        i += 1
 tf = []
 universe = [x for x in range(len(meaning))]
 for prem in lop:
@@ -94,7 +98,7 @@ for prem in lop:
     elif tag == "some":
         tag = 'i'
     tf.append((tag, ind1[0], ind2[0]))
-
+print(meaning)
 database = Database(universe, set(tf), verbs, meaning)
 engine = Engine(rules, database, None)
 provables = engine.provable_tf()
@@ -107,9 +111,6 @@ for tf in provables:
     elif t == "i":
         t = "some "
     print(t + nv1 + " are " + nv2)
-print()
-
-print(meaning)
 # have to fix by maintaining condition that target is in dict, double check w rules
 # code pertaining to translating the target
 target = input("Enter a target\n")

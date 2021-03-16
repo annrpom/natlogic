@@ -37,7 +37,7 @@ def allverbs(term1, term2):
     return relative
 
 
-# applies verb to claurse in table created by rc and meaning
+# applies verb to clause in table created by rc and meaning
 def change(verb, clause, tbl):
     return tbl[verb][clause]
 

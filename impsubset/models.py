@@ -8,6 +8,7 @@
 # something like algo 2.33?
 class Model:
 
+    # output is going to be a couter-model, input will be the same as what the user did for other class (engine)
     def __init__(self, set, interpn):
         self.uni = set
         self.interpn = interpn
@@ -25,4 +26,3 @@ class Model:
                 if mydict[noun].issubset(mydict[othern]):
                     sentences.append(('a', noun, othern))
         return sentences
-
