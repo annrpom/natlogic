@@ -71,8 +71,9 @@ print(test.subterms)
 print("hello")
 test1 = R("see-a(like-a(x))")
 test2 = R("see-a(like-a(y))")
-print(allverbs(R('x'), R('y')))
+rc = allverbs(R('x'), R('y'))
 print(convert(test1, test2))
+verb(1, table(allverbs()))
 
 
 

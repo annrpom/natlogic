@@ -1,7 +1,5 @@
 import itertools
 from partialfn import *
-from rules import *
-
 # this is the dictionary that keeps track of the proofs
 ans = {}
 
@@ -73,7 +71,20 @@ class Rule:
                     t, v1, v2 = tf
                     pt, pv1, pv2 = ptf
                     if self.pf_huh():
-                        partfn(database, tf, ptf, tfl)
+                        val = partfn(database, tf, ptf, tfl)
+                        if val == 0:
+                            if isinstance(pv2, R):
+                                my_dict[pv1] = v1
+                                my_dict[pv2.term] = v2
+                            else:
+                                my_dict[pv1] = v1
+                                if pv2 in my_dict:
+                                    if v2 == my_dict[pv2]:
+                                        tbl = table(database.lov, database.meaning)
+                                        v = verb(v2, tbl)
+                                        my_dict['z'] = change(v, v1, tbl)
+                        else:
+                            break
                     elif self.name == 'anti':
                         anti(database, tf, ptf, tfl)
                     else:
@@ -90,6 +101,8 @@ class Rule:
                 else:
                     if len(my_dict) == len(self.valid_vars()):
                         t, v1, v2 = self.conclusion
+                        if isinstance(v2, R):
+                            v2 = v2.term
                         child_pt = (t, my_dict[v1], my_dict[v2])
                         if child_pt not in ans.keys():
                             ans[child_pt] = (self.name, poss)
@@ -99,9 +112,11 @@ class Rule:
 
 # class represents database: universe and set of tagfacts
 class Database:
-    def __init__(self, universe, lot):
+    def __init__(self, universe, lot, lov, meaning):
         self.universe = universe
         self.lot = lot
+        self.lov = lov
+        self.meaning = meaning
         for tf in lot:
             if tf not in ans.keys():
                 ans[tf] = None
@@ -167,7 +182,7 @@ class Engine:
             i += 1
 
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
-    def gen_tf(self, myDict):
+    def gen_tf(self, mydict):
         while True:
             self.size = self.database.size()
             for rule in self.rules:
@@ -175,7 +190,7 @@ class Engine:
                 self.database.lot.update(generated)
                 if self.target in ans.keys():
                     print("Proof was found!")
-                    self.print_proof(myDict)
+                    self.print_proof(mydict)
                     ans.clear()
                     return
             if self.size == self.database.size():
@@ -199,3 +214,60 @@ class Engine:
                             provables.append(val)
                         provables.append(item)
                 return provables
+
+
+# Notes:
+# need class models - models of stuff before & after verbs
+# before: model(universe, interpretation of nouns -- user input ? (interpretation fn))
+# truth of sentences (subset) - models satisfaction
+# user input model? -- interface proof system w model -- user input tf (countermodel like in class)
+# proof or countermodel
+def axiom(database):
+    tfl = [('a', n, n) for n in database.universe]
+    for item in tfl:
+        ans[item] = ("axiom", [])
+    return tfl
+
+
+def partfn(database, tf, ptf, tfl):
+    t, v1, v2 = tf
+    pt, pv1, pv2 = ptf
+    if isinstance(pv1, N):  # for our rule one
+        nx = N(v2)
+        nx.negate(len(database.universe))
+        if nx.val == v1:
+            for i in database.universe:
+                if i == v2:
+                    continue
+                child_pt = (t, i, v2)
+                ans[child_pt] = ("one", [])
+                tfl.append(child_pt)
+    elif isinstance(pv2, N):
+        nx = N(v1)
+        nx.negate(len(database.universe))
+        if nx.val == v2:
+            for i in database.universe:
+                if i == v1:
+                    continue
+                child_pt = (t, v1, i)
+                ans[child_pt] = ("zero", [])
+                tfl.append(child_pt)
+    else:
+        return 0
+
+
+def anti(database, tf, ptf, tfl):
+    t, v1, v2 = tf
+    pt, pv1, pv2 = ptf
+    nx = N(v1)
+    ny = N(v2)
+    nx.negate(len(database.universe))
+    ny.negate(len(database.universe))
+    child_pt = (t, ny.val, nx.val)
+    ans[child_pt] = ("anti", [])
+    tfl.append(child_pt)
+    if len(database.lov):
+        for v in database.lov:
+            child_pt = (t, change(v, v1, verbs), change(v, v2, verbs))
+            ans[child_pt] = ("anti", [])
+            tfl.append(child_pt)

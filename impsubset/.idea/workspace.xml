@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ace7a17-e239-40cc-9aa7-ac18a2c26859" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/rules.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/SyllogisticEngine-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/SyllogisticEngine-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SyllogisticEngine.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/SyllogisticEngine.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/partialfn.py" beforeDir="false" afterPath="$PROJECT_DIR$/partialfn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relational.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rules.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/subsetInf.py" beforeDir="false" afterPath="$PROJECT_DIR$/subsetInf.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/syllogistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/syllogistic.py" afterDir="false" />
     </list>
@@ -162,7 +162,10 @@
       <workItem from="1614030221896" duration="10370000" />
       <workItem from="1614221927294" duration="227000" />
       <workItem from="1614223696778" duration="828000" />
-      <workItem from="1614654514080" duration="20383000" />
+      <workItem from="1614654514080" duration="22323000" />
+      <workItem from="1615255606298" duration="6159000" />
+      <workItem from="1615309524469" duration="9237000" />
+      <workItem from="1615913298244" duration="7269000" />
     </task>
     <servers />
   </component>
@@ -185,8 +188,8 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/impsubset$main.coverage" NAME="main Coverage Results" MODIFIED="1614667000989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/impsubset$main.coverage" NAME="main Coverage Results" MODIFIED="1615260068580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/impsubset$subsetInf.coverage" NAME="subsetInf Coverage Results" MODIFIED="1610857711219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/impsubset$syllogistic.coverage" NAME="syllogistic Coverage Results" MODIFIED="1614712798837" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/impsubset$syllogistic.coverage" NAME="syllogistic Coverage Results" MODIFIED="1615920449278" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

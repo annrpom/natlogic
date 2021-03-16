@@ -1,5 +1,12 @@
-from subsetInf import *
 import re
+
+
+# takes in a value that exists in our table and returns what verb it belongs in
+def verb(val, table):
+    ref = table
+    for key in ref:
+        if key[2] != 6:
+            return key
 
 
 def equal(a, b):
@@ -9,6 +16,16 @@ def equal(a, b):
     return regex.sub('', a) == regex.sub('', b)
 
 
+def getverb(term1):
+    lot1 = R(term1).term.split("(")
+    relative = []  # all of the rcs
+    for word in lot1:
+        if len(word.split(")")) == 1:
+            relative.append(word)
+    return relative
+
+
+# gives all of the unique verbs that occur between the two terms
 def allverbs(term1, term2):
     lot1 = term1.term.split("(")
     lot2 = term2.term.split("(")
@@ -20,11 +37,21 @@ def allverbs(term1, term2):
     return relative
 
 
-def change(verb, clause, rc):
-    tbl = table(rc, meaning)
+# applies verb to claurse in table created by rc and meaning
+def change(verb, clause, tbl):
     return tbl[verb][clause]
 
 
+def add(term, dict):
+    i = len(dict)
+    relational = R(term)
+    for t in relational.subterms.values():
+        dict[i] = t
+        i += 1
+    return dict
+
+
+# takes 2 terms and converts them in our back-end thing
 def convert(term1, term2):
     relative = allverbs(term1, term2)
     t1 = term1.subterms  # this is the final dict
@@ -44,6 +71,7 @@ def convert(term1, term2):
     return v1, v2
 
 
+# given all of the relative verbs and a dictionary of all the terms/subterms, table will give ya a table
 def table(rc, dictitems):
     index = len(dictitems)
     value = 6
