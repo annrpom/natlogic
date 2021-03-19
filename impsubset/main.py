@@ -1,5 +1,4 @@
-from subsetInf import *
-from partialfn import *
+
 from models import *
 
 barbara = Rule('barbara', [('a', 'x', 'y'), ('a', 'y', 'z')], ('a', 'x', 'z'))
@@ -13,3 +12,6 @@ interp = {'n': set(), 'p': set([1, 3, 4]), 'q': set([1, 3])}
 example = Model({1, 2, 3, 4, 5}, interp)
 gen = example.generate()
 print(gen)
+
+universe = [x for x in range(3)]
+model = Model(universe, {})

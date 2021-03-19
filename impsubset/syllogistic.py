@@ -1,7 +1,67 @@
 from subsetInf import *
 from partialfn import *
 
+
 # if i could make a change - change rule to abstract class and have NRule and regRule stem from it
+
+def provables(verbs, raw_vars):
+    i = 0
+    for prem in lop:
+        t, w1, _, w2 = prem.split()
+        if len(w1) > 1:
+            if "non-" in w1:
+                w1 = w1[4]
+            else:
+                add(w1, meaning)
+                verbs += getverb(w1)
+        if len(w2) > 1:
+            if "non-" in w2:
+                w2 = w2[4]
+            else:
+                add(w2, meaning)
+                verbs += getverb(w2)
+        raw_vars.add(w1)
+        raw_vars.add(w2)
+    raw_vars = sorted(raw_vars)
+    for var in raw_vars:
+        meaning[i] = var
+        i += 1
+    j = len(meaning)
+    for val in meaning.values():
+        if val in raw_vars:
+            raw_vars.remove(val)
+    for var in raw_vars:
+        meaning[j] = var
+        j += 1
+    nons = ["non-" + var for var in meaning.values()]
+    for item in nons:
+        meaning[i] = item
+        i += 1
+    relatives = []
+    for v in verbs:
+        sub = [v + "(" + var + ")" for var in meaning.values()]
+        relatives += sub
+    for item in relatives:
+        if item in meaning.values():
+            pass
+        else:
+            meaning[i] = item
+            i += 1
+    tf = []
+    universe = [x for x in range(len(meaning))]
+    for prem in lop:
+        tag, w1, _, w2 = prem.split()
+        ind1 = [ind for ind, word in meaning.items() if word == w1]
+        ind2 = [ind for ind, word in meaning.items() if word == w2]
+        if tag == "all":
+            tag = 'a'
+        elif tag == "some":
+            tag = 'i'
+        tf.append((tag, ind1[0], ind2[0]))
+    database = Database(universe, set(tf), verbs, meaning)
+    engine = Engine(rules, database, None)
+    return engine.provable_tf()
+
 
 axiom = Rule('axiom', [], ('a', 'x', 'x'))
 barbara = Rule('barbara', [('a', 'x', 'y'), ('a', 'y', 'z')], ('a', 'x', 'z'))
@@ -45,63 +105,8 @@ while True:
 lop = set(lop)
 raw_vars = set()
 print("Generated below are all of the provable tagfacts when given your premises:")
-i = 0
-for prem in lop:
-    t, w1, _, w2 = prem.split()
-    if len(w1) > 1:
-        if "non-" in w1:
-            w1 = w1[4]
-        else:
-            add(w1, meaning)
-            verbs += getverb(w1)
-    if len(w2) > 1:
-        if "non-" in w2:
-            w2 = w2[4]
-        else:
-            add(w2, meaning)
-            verbs += getverb(w2)
-    raw_vars.add(w1)
-    raw_vars.add(w2)
-raw_vars = sorted(raw_vars)
-for var in raw_vars:
-    meaning[i] = var
-    i += 1
-j = len(meaning)
-for val in meaning.values():
-    if val in raw_vars:
-        raw_vars.remove(val)
-for var in raw_vars:
-    meaning[j] = var
-    j += 1
-nons = ["non-" + var for var in meaning.values()]
-for item in nons:
-    meaning[i] = item
-    i += 1
-relatives = []
-for v in verbs:
-    sub = [v + "(" + var + ")" for var in meaning.values()]
-    relatives += sub
-for item in relatives:
-    if item in meaning.values():
-        pass
-    else:
-        meaning[i] = item
-        i += 1
-tf = []
-universe = [x for x in range(len(meaning))]
-for prem in lop:
-    tag, w1, _, w2 = prem.split()
-    ind1 = [ind for ind, word in meaning.items() if word == w1]
-    ind2 = [ind for ind, word in meaning.items() if word == w2]
-    if tag == "all":
-        tag = 'a'
-    elif tag == "some":
-        tag = 'i'
-    tf.append((tag, ind1[0], ind2[0]))
-print(meaning)
-database = Database(universe, set(tf), verbs, meaning)
-engine = Engine(rules, database, None)
-provables = engine.provable_tf()
+
+provables = provables(verbs)
 for tf in provables:
     t, v1, v2 = tf
     nv1 = meaning[v1]
@@ -125,5 +130,5 @@ try:
 except:
     print("No proof can be generated")
 
-engine = Engine(rules, database, target)
-engine.gen_tf(meaning)
+engine = Engine(rules, Database([x for x in range(len(meaning))], set(tf), verbs, meaning), target)
+engine.gen_tf()

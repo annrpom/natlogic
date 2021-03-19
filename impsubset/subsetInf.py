@@ -191,7 +191,7 @@ class Engine:
             i += 1
 
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
-    def gen_tf(self, mydict):
+    def gen_tf(self):
         while True:
             self.size = self.database.size()
             for rule in self.rules:
@@ -199,7 +199,7 @@ class Engine:
                 self.database.lot.update(generated)
                 if self.target in ans.keys():
                     print("Proof was found!")
-                    self.print_proof(mydict)
+                    self.print_proof(self.database.meaning)
                     ans.clear()
                     return
             if self.size == self.database.size():
