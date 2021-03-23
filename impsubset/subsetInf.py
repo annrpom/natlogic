@@ -34,6 +34,7 @@ class Rule:
     # returns only the possible tag facts in the database that can be used w rule
     # this is for reducing the amt of possibilities we can have
     def possibilities(self, database):
+        print(database.lot)
         possible = set(
             tf for tf in database.lot if
             tf[0] in self.valid_tags())  # filters out nonvalid tf based on tag

@@ -3,20 +3,29 @@ from partialfn import *
 
 
 # if i could make a change - change rule to abstract class and have NRule and regRule stem from it
+# do not do non
+
+rules = []
+meaning = {}  # dict
+lop = []
+verbs = []  # verbs that exist
 
 def provables(verbs, raw_vars):
     i = 0
+    non_flag = False
     for prem in lop:
         t, w1, _, w2 = prem.split()
         if len(w1) > 1:
             if "non-" in w1:
                 w1 = w1[4]
+                non_flag = True
             else:
                 add(w1, meaning)
                 verbs += getverb(w1)
         if len(w2) > 1:
             if "non-" in w2:
                 w2 = w2[4]
+                non_flag = True
             else:
                 add(w2, meaning)
                 verbs += getverb(w2)
@@ -33,10 +42,11 @@ def provables(verbs, raw_vars):
     for var in raw_vars:
         meaning[j] = var
         j += 1
-    nons = ["non-" + var for var in meaning.values()]
-    for item in nons:
-        meaning[i] = item
-        i += 1
+    if non_flag:
+        nons = ["non-" + var for var in meaning.values()]
+        for item in nons:
+            meaning[i] = item
+            i += 1
     relatives = []
     for v in verbs:
         sub = [v + "(" + var + ")" for var in meaning.values()]
@@ -60,7 +70,7 @@ def provables(verbs, raw_vars):
         tf.append((tag, ind1[0], ind2[0]))
     database = Database(universe, set(tf), verbs, meaning)
     engine = Engine(rules, database, None)
-    return engine.provable_tf()
+    return set(engine.provable_tf())
 
 
 axiom = Rule('axiom', [], ('a', 'x', 'x'))
@@ -87,16 +97,12 @@ print(str(some2) + "\n" + str(zero) + "\n" + str(one) + "\n" + str(anti) + "\n")
 # rule selection string match
 ulor = input("Enter choices below:\n")
 ulor = ulor.split(", ")
-rules = []
-meaning = {}  # dict
 for rule in ulor:
     for setrule in lor:
         if rule == setrule.name:
             rules.append(setrule)
 print("Please enter your list of premises. Press tab when finished.")
 print("These should be in the form all _ are _ OR some _ are _")
-lop = []
-verbs = []  # verbs that exist
 while True:
     prem = input("Enter a premise and then hit ENTER or just press ENTER if finished\n")
     if prem == '':
@@ -106,7 +112,7 @@ lop = set(lop)
 raw_vars = set()
 print("Generated below are all of the provable tagfacts when given your premises:")
 
-provables = provables(verbs)
+provables = provables(verbs, raw_vars)
 for tf in provables:
     t, v1, v2 = tf
     nv1 = meaning[v1]
@@ -130,5 +136,7 @@ try:
 except:
     print("No proof can be generated")
 
-engine = Engine(rules, Database([x for x in range(len(meaning))], set(tf), verbs, meaning), target)
+print(target)
+settarg = set([])
+engine = Engine(rules, Database([x for x in range(len(meaning))], tf, verbs, meaning), settarg.add(target))
 engine.gen_tf()

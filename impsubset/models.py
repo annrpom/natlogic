@@ -2,34 +2,25 @@ import syllogistic
 from subsetInf import *
 
 
-# Notes:
-# need class models - models of stuff before & after verbs
-# before: model(universe, interpretation of nouns -- user input ? (interpretation fn))
-# truth of sentences (subset) - models satisfaction
-# user input model? -- interface proof system w model -- user input tf (countermodel like in class)
-# proof or countermodel
+def checkhelp(p, nons):
+    for n in nons:
+        if p <= n:
+            return True
+    return False
 
-# something like algo 2.33?
+
 class Model:
 
     # output is going to be a couter-model, input will be the same as what the user did for other class (engine)
-    def __init__(self, set, interpn):
+    def __init__(self, set, lon, engine):
         self.uni = set
-        self.interpn = interpn
+        self.lon = lon
+        self.engine = engine
+        self.meaning = engine.database.meaning
         # notes: wanna gen everything that has compliment in them, generate all provable ones
         # if contrad, break
         # orthoposet
         # some x are y -> x and y both state
-
-    def generate(self):
-        # of the all logic
-        sentences = []
-        mydict = self.interpn
-        for noun in self.interpn:
-            for othern in self.interpn:
-                if mydict[noun].issubset(mydict[othern]):
-                    sentences.append(('a', noun, othern))
-        return sentences
 
     # these are all assuming that our phi is a translated tag fact of the form ('a', 1, 0)
     def semanticn(self, phi):
@@ -42,41 +33,56 @@ class Model:
         else:
             rt = 'a'
         return rt, rv1, rv2
-'''
-    def echecker(self, lon):
-        for key in meaning:
-            for val in meaning[key]:
-                if "non" in val:
-                    if
 
-    def sfinder(self, lon):
+    def echecker(self):
+        # return boolean
+        nons = [x for x in self.meaning if "non" in self.meaning[x]]
+        pos = [x for x in self.meaning if x not in nons]
 
-    def countermodel(self, lot, target):
-        t = target[0]
-        lop = [(x, y) for _,x,y in lot]
+        return any(map(lambda x: checkhelp(x, nons), pos))
+
+    def sfinder(self):
+        inp = self.lon
+        idx = len(self.meaning)
+        if self.echecker():
+            for noun in self.lon:
+                nounval = self.meaning[noun]
+                negval = N(noun)
+                negval.negate(len(self.uni))
+                self.meaning[idx] = noun
+                if not self.echecker():
+                    del self.meaning[idx]
+                else:
+                    idx += 1
+                self.meaning[idx] = negval
+                if not self.echecker():
+                    del self.meaning[idx]
+                else:
+                    idx += 1
+        return inp
+
+    def countermodel(self):
+        t = self.engine.target[0]
+        provables = syllogistic.provables([], [])  # L
         if t == 'a':
-        # case 1 all logic
-        else:
-        # case 2
-        echecker(lon)
+            ntarget = self.semanticn(self.engine.target)
+            provables.append(ntarget)
+            all = filter(lambda x: x[0] == "a", provables)
+            # case 1 all logic
 
+        else:
+            some = filter(lambda x: x[0] == "i", provables)  # M
+            # case 2
+            state = self.sfinder()
 
     def checkcon(self, lot):
         verbs = []
         raw_vars = set()
         provables = syllogistic.provables(verbs, raw_vars)
+        # do list comprehension
         for phi in lot:
             nphi = self.semanticn(phi)
             if nphi in lot:
-                database = Database(self.uni, lot, lov, meaning)
-                Engine(rules, database, phi).gen_tf(meaning)
-                Engine(rules, database, nphi).gen_tf()
-                print("Since the assumptions are inconsistent, anything follows")
-                break
+                return True
         else:
-            countermodel()
-'''
-
-
-
-    # if this list derives both o and o-bar
+            return False
