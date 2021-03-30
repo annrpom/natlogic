@@ -34,7 +34,6 @@ class Rule:
     # returns only the possible tag facts in the database that can be used w rule
     # this is for reducing the amt of possibilities we can have
     def possibilities(self, database):
-        print(database.lot)
         possible = set(
             tf for tf in database.lot if
             tf[0] in self.valid_tags())  # filters out nonvalid tf based on tag
@@ -197,7 +196,11 @@ class Engine:
             self.size = self.database.size()
             for rule in self.rules:
                 generated = rule.apply(self.database)  # this produces a [ListOf ProofTrees]
+                print("in gen_tf, here are generated")
+                print(generated)
                 self.database.lot.update(generated)
+                print("in gen_tf, here is updated db")
+                print(self.database.lot)
                 if self.target in ans.keys():
                     print("Proof was found!")
                     self.print_proof(self.database.meaning)

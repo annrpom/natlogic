@@ -1,12 +1,7 @@
+from functools import reduce
+import itertools
 import syllogistic
 from subsetInf import *
-
-
-def checkhelp(p, nons):
-    for n in nons:
-        if p <= n:
-            return True
-    return False
 
 
 class Model:
@@ -24,65 +19,69 @@ class Model:
 
     # these are all assuming that our phi is a translated tag fact of the form ('a', 1, 0)
     def semanticn(self, phi):
-        t, v1, v2 = phi
         rt, rv1, rv2 = phi
-        rv2 = N(v2)
+        rv2 = N(rv2)
         rv2.negate(len(self.uni))  # put an actual n in here
-        if t == 'a':
+        rv2 = rv2.val
+        if rt == 'a':
             rt = 'i'
         else:
             rt = 'a'
         return rt, rv1, rv2
 
-    def echecker(self):
+    def echecker(self, lon):  # lop is a list of pairs
         # return boolean
-        nons = [x for x in self.meaning if "non" in self.meaning[x]]
-        pos = [x for x in self.meaning if x not in nons]
+        # all x are non-y counts, does all non-x are non-y count
+        cprod = itertools.product(lon)
+        state = set([])
+        for pair in cprod:
+            v1, v2 = pair
+            if (len(self.meaning[v1]) == 1) and ("non" in self.meaning[v2]):
+                return False
+            else:
+                state.add(v1)
+                state.add(v2)
+        return state
 
-        return any(map(lambda x: checkhelp(x, nons), pos))
+    # all we are doing now is finding states (think orthoposet)
+    def sfinder(self, inputl, lon):
+        state = self.echecker(inputl)  # input list is extendable
+        for x in lon:
+            state.add(x)
+            if self.echecker(state):
+                continue
+            else:
+                state.remove(x)
+                nx = N(x)
+                nx.negate(len(self.uni))
+                state.add(nx.val)
+        return state
 
-    def sfinder(self):
-        inp = self.lon
-        idx = len(self.meaning)
-        if self.echecker():
-            for noun in self.lon:
-                nounval = self.meaning[noun]
-                negval = N(noun)
-                negval.negate(len(self.uni))
-                self.meaning[idx] = noun
-                if not self.echecker():
-                    del self.meaning[idx]
-                else:
-                    idx += 1
-                self.meaning[idx] = negval
-                if not self.echecker():
-                    del self.meaning[idx]
-                else:
-                    idx += 1
-        return inp
-
-    def countermodel(self):
-        t = self.engine.target[0]
-        provables = syllogistic.provables([], [])  # L
+    def countermodel(self, lopt, target):
+        t = target[0]
+        # case 1 all logic
         if t == 'a':
+            all = filter(lambda x: x[0] == "a", lopt)
+            all = map(lambda x: [x[1], x[2]], all)
+            lon = set(reduce(lambda a, d: a + d, all))
             ntarget = self.semanticn(self.engine.target)
-            provables.append(ntarget)
-            all = filter(lambda x: x[0] == "a", provables)
-            # case 1 all logic
-
+        # case 2
         else:
-            some = filter(lambda x: x[0] == "i", provables)  # M
-            # case 2
-            state = self.sfinder()
+            some = filter(lambda x: x[0] == "i", lopt)  # M
+            some = map(lambda x: [x[1], x[2]], some)
+            losomen = set(reduce(lambda a, d: a + d, some))
+            if self.echecker(losomen):
+                return self.sfinder(losomen, self.lon)
+            else:
+                print("ask what to do here")
 
-    def checkcon(self, lot):
-        verbs = []
-        raw_vars = set()
-        provables = syllogistic.provables(verbs, raw_vars)
+    # going to assume we get provables as input
+    def checkcon(self, lopt):
         # do list comprehension
-        for phi in lot:
+        for phi in lopt:
             nphi = self.semanticn(phi)
-            if nphi in lot:
-                return True
+            if nphi in lopt:
+                # so i do not have to look up the thing that makes it consistent or not
+                return phi, nphi
         else:
-            return False
+            return True
