@@ -1,15 +1,24 @@
 from functools import reduce
 import itertools
-import syllogistic
 from subsetInf import *
 
 
 class Model:
 
     # output is going to be a couter-model, input will be the same as what the user did for other class (engine)
-    def __init__(self, set, lon, engine):
-        self.uni = set
-        self.lon = lon
+    def __init__(self, lopt, engine):
+        self.uni = engine.database.universe
+        self.lopt = lopt
+        lall = filter(lambda x: x[0] == "a", lopt)
+        lall = map(lambda x: [x[1], x[2]], lall)
+        self.all = set(reduce(lambda a, d: a + d, lall))
+        lsome = filter(lambda x: x[0] == "i", lopt)  # M
+        lsome = map(lambda x: [x[1], x[2]], lsome)
+        self.lsome = set(reduce(lambda a, d: a + d, lsome))
+        sall = set(lall)
+        ssome = set(lsome)
+        sall |= ssome  # this joins two sets
+        self.lon = lall
         self.engine = engine
         self.meaning = engine.database.meaning
         # notes: wanna gen everything that has compliment in them, generate all provable ones
@@ -61,17 +70,11 @@ class Model:
         t = target[0]
         # case 1 all logic
         if t == 'a':
-            all = filter(lambda x: x[0] == "a", lopt)
-            all = map(lambda x: [x[1], x[2]], all)
-            lon = set(reduce(lambda a, d: a + d, all))
             ntarget = self.semanticn(self.engine.target)
         # case 2
         else:
-            some = filter(lambda x: x[0] == "i", lopt)  # M
-            some = map(lambda x: [x[1], x[2]], some)
-            losomen = set(reduce(lambda a, d: a + d, some))
-            if self.echecker(losomen):
-                return self.sfinder(losomen, self.lon)
+            if self.echecker(self.lsome):
+                return self.sfinder(self.lsome, self.lon)
             else:
                 print("ask what to do here")
 
@@ -85,3 +88,15 @@ class Model:
                 return phi, nphi
         else:
             return True
+
+    def gencm(self):
+        if not self.engine.gen_tf():
+            print()
+            print("We go on to generate a countermodel:")
+            self.countermodel(self.lopt, self.engine.target)
+
+
+class Modelarc(Model):
+    def __init__(self, lopt, engine):
+        super().__init__(lopt, engine)
+

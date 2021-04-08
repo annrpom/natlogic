@@ -61,7 +61,7 @@ class Rule:
     # returns the possible TagFacts that can be generated from Database
     # abstract usage of N and R for the partialfn part
     def apply(self, database):
-        if self.name == "axiom":  # axiom, only rule w empty premise list
+        if self.name == "axiom":  # axiom should not be applied to whole database - needs to factor in for some
             return axiom(database)
         else:
             tfl = []
@@ -171,7 +171,7 @@ class Engine:
                 t, v1, v2 = item
                 if t == 'a':
                     t = "all "
-                if t == 's':
+                if t == 'i':
                     t = "some "
                 translated = t + myDict[v1] + " are " + myDict[v2]
                 print(translated, "-- given")
@@ -196,11 +196,7 @@ class Engine:
             self.size = self.database.size()
             for rule in self.rules:
                 generated = rule.apply(self.database)  # this produces a [ListOf ProofTrees]
-                print("in gen_tf, here are generated")
-                print(generated)
                 self.database.lot.update(generated)
-                print("in gen_tf, here is updated db")
-                print(self.database.lot)
                 if self.target in ans.keys():
                     print("Proof was found!")
                     self.print_proof(self.database.meaning)
@@ -208,7 +204,7 @@ class Engine:
                     return
             if self.size == self.database.size():
                 print("Nothing was found")
-                break
+                return False
         ans.clear()
 
     def provable_tf(self):
