@@ -68,15 +68,16 @@ class Model:
 
     def countermodel(self, lopt, target):
         t = target[0]
+        li = list(self.lsome)
+        state = [li[0], li[len(li)]]
         # case 1 all logic
         if t == 'a':
             ntarget = self.semanticn(self.engine.target)
+            state.append(ntarget)
+            return self.sfinder(state, self.lon)
         # case 2
         else:
-            if self.echecker(self.lsome):
-                return self.sfinder(self.lsome, self.lon)
-            else:
-                print("ask what to do here")
+            return self.sfinder(state, self.lsome)
 
     # going to assume we get provables as input
     def checkcon(self, lopt):

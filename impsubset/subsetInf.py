@@ -183,7 +183,7 @@ class Engine:
             english = ""
             if t == 'a':
                 english += "all "
-            if t == 's':
+            if t == 'i':
                 english += "some "
             english = english + tv1 + " are " + tv2
             print(english + " uses " + rule + " from applications of " + str(nums_used))
