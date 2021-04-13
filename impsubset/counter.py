@@ -106,7 +106,6 @@ for tf in provables:
 # have to fix by maintaining condition that target is in dict, double check w rules
 # code pertaining to translating the target
 target = input("Enter a target\n")
-print()
 ttag, tw1, _, tw2 = target.split()
 try:
     ind1 = [ind for ind, word in meaning.items() if word == tw1]

@@ -118,7 +118,7 @@ for tf in provables:
     print(t + nv1 + " are " + nv2)
 # have to fix by maintaining condition that target is in dict, double check w rules
 # code pertaining to translating the target
-target = input("Enter a target\n")
+target = input("\nEnter a target\n")
 ttag, tw1, _, tw2 = target.split()
 try:
     ind1 = [ind for ind, word in meaning.items() if word == tw1]
@@ -130,5 +130,6 @@ try:
 except:
     print("No proof can be generated")
 
+print("")
 engine = Engine(rules, database, target)
 engine.gen_tf()
