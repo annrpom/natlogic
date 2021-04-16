@@ -29,9 +29,13 @@ while True:
     if prem == '':
         break
     lop.append(prem)
+"""
+test = ["all a are z", "all z are a", "all a are non-b", "all c are b", "all non-c are d", "some non-b are non-a", "some non-c are b"]
+for t in test:
+    lop.append(t)
+"""
 lop = set(lop)
 raw_vars = set()
-print("Generated below are all of the provable tagfacts when given your premises:")
 non_flag = False
 i = 0
 for prem in lop:
@@ -93,16 +97,6 @@ for prem in lop:
 database = Database(universe, set(tf), verbs, meaning)
 engine = Engine(rules, database, None)
 provables = engine.provable_tf()
-model = Model(provables, engine)
-for tf in provables:
-    t, v1, v2 = tf
-    nv1 = meaning[v1]
-    nv2 = meaning[v2]
-    if t == 'a':
-        t = "all "
-    elif t == "i":
-        t = "some "
-    print(t + nv1 + " are " + nv2)
 # have to fix by maintaining condition that target is in dict, double check w rules
 # code pertaining to translating the target
 target = input("Enter a target\n")
@@ -118,8 +112,10 @@ except:
     print("No proof can be generated")
 
 engine = Engine(rules, database, target)
-model = Model(provables, engine)
-model.gencm()
+lopn = map(lambda x: [x[1], x[2]], provables)
+yep = countermodel(target, provables, lopn, engine.database.meaning.keys(), engine.database.meaning, engine.database.universe)
+for i in yep:
+    print(i)
 
 """
 Test on
