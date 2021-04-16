@@ -1,5 +1,7 @@
 import itertools
+from text_image import *
 from partialfn import *
+
 # this is the dictionary that keeps track of the proofs
 ans = {}
 
@@ -189,6 +191,35 @@ class Engine:
             print(english + " uses " + rule + " from applications of " + str(nums_used))
             nums_used = []
             i += 1
+
+    # (Dict Num String) -> String
+    def pretty_print(self, myDict):
+        # TagFacts -> String
+        # Not considering all tags. Extend as needed
+        def nodeStr(node):
+            tag    = "All " if node[0] == 'a' else "I "
+            first  = myDict[node[1]] if isinstance(node[1],int) else node[1]
+            second = myDict[node[2]] if isinstance(node[2],int) else node[2]
+            return tag + first + " " + second
+        def pretty_print_internal(node):
+            sub      = ans[node]
+            rule     = "given" if not sub else sub[0]
+            parents  = [] if not sub else sub[1]
+            subtrees = TextImage("")
+            nodeStrg = nodeStr(node)
+            for parent in parents:
+                subtrees = subtrees.beside(pretty_print_internal(parent), 2)
+            # ---- bar needs to be big enough to under/overline the bigger among:
+            # * the root
+            # * the sub-proofs
+            # so, need a tiny `if` to make this look pretty
+            if(subtrees.width > len(nodeStrg)):
+                bar_rule = "-" * (subtrees.width + 2)
+                return subtrees.aboveStr(bar_rule).aboveStr(nodeStrg).beside(TextImage([rule,""]),1)
+            else:
+                bar_rule = "-" * (len(nodeStrg) + 2)
+                return subtrees.above(TextImage(bar_rule).aboveStr(nodeStrg).beside(TextImage([rule,""]), 1))
+        return str(pretty_print_internal(self.target))
 
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
     def gen_tf(self):

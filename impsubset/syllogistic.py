@@ -132,4 +132,10 @@ except:
 
 print("")
 engine = Engine(rules, database, target)
+
+engine.gen_tf(extraction)
+print("\n\n")
+print(engine.pretty_print(extraction))
+
 engine.gen_tf()
+
