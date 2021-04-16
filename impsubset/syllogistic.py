@@ -119,6 +119,7 @@ for tf in provables:
 # have to fix by maintaining condition that target is in dict, double check w rules
 # code pertaining to translating the target
 target = input("\nEnter a target\n")
+ntar = target
 ttag, tw1, _, tw2 = target.split()
 try:
     ind1 = [ind for ind, word in meaning.items() if word == tw1]
@@ -134,8 +135,15 @@ print("")
 engine = Engine(rules, database, target)
 
 print("\n\n")
+llop = list(lop)
+for prem in range(len(llop)):
+    if prem == len(llop)-1:
+        print(llop[prem], end='')
+    else:
+        print(llop[prem] + ", ", end='')
+print(" ⊢ " + ntar + "\n")
 print("The following is a Proof Tree:")
 print(engine.pretty_print(engine.database.meaning))
-print("\n")
+print("")
 engine.gen_tf()
 
