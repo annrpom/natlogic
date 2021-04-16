@@ -1,8 +1,8 @@
 from subsetInf import *
 from partialfn import *
+from models import *
 
-# if i could make a change - change rule to abstract class and have NRule and regRule stem from it
-# reread AR(C) logic
+# for S dagger
 
 axiom = Rule('axiom', [], ('a', 'x', 'x'))
 barbara = Rule('barbara', [('a', 'x', 'y'), ('a', 'y', 'z')], ('a', 'x', 'z'))
@@ -11,29 +11,15 @@ some1 = Rule('some1', [('i', 'x', 'y')], ('i', 'x', 'x'))
 some2 = Rule('some2', [('i', 'x', 'y')], ('i', 'y', 'x'))
 zero = Rule('zero', [('a', 'x', N('x'))], ('a', 'x', 'y'))  # states in orthoposet
 one = Rule('one', [('a', N('x'), 'x')], ('a', 'y', 'x'))  # states in orthoposet
-anti = Rule('anti', [('a', 'x', 'y')], ('a', R('y'), R('x')))
-x = Rule('x', [('a', 'x', 'y'), ('i', R('x'), 'y')], "any")
-down = Rule('down', [('a', 'x', R('y')), ('a', 'z', 'y')], ('a', 'x', R('z')))
-lor = [axiom, barbara, darii, some1, some2, one, zero, anti, x, down]
+#anti = Rule('anti', [('a', 'x', 'y')], ('a', R('y'), R('x')))
+#x = Rule('x', [('a', 'x', 'y'), ('i', R('x'), 'y')], "any")
+#down = Rule('down', [('a', 'x', R('y')), ('a', 'z', 'y')], ('a', 'x', R('z')))
+
+rules = [axiom, barbara, darii, some1, some2, one, zero]
 # need syntax w verbs, cannot define own but there was list -- possibility,
 # gen of rules for user made up
-print("Hello. Welcome to the syllogistic inference evaluator.")
-print("Examples are coming soon THEY WILL BE GENERATED HERE")
-print("")
-print("-".join("-" * 10))
-print("Below are a list of rules to choose from, please type in which rules you would like this engine to have.")
-print("(Put these on one line, separated by commas. Press enter when finished.)\n")
-print(str(axiom) + "\n" + str(barbara) + "\n" + str(darii) + "\n" + str(some1) + "\n" + str(down))
-print(str(some2) + "\n" + str(zero) + "\n" + str(one) + "\n" + str(anti) + "\n")
-# rule selection string match
-ulor = input("Enter choices below:\n")
-ulor = ulor.split(", ")
-rules = []
+print("Hello. Welcome to the model constructor")
 meaning = {}  # dict
-for rule in ulor:
-    for setrule in lor:
-        if rule == setrule.name:
-            rules.append(setrule)
 print("Please enter your list of premises. Press tab when finished.")
 print("These should be in the form all _ are _ OR some _ are _")
 lop = []
@@ -43,9 +29,13 @@ while True:
     if prem == '':
         break
     lop.append(prem)
+"""
+test = ["all a are z", "all z are a", "all a are non-b", "all c are b", "all non-c are d", "some non-b are non-a", "some non-c are b"]
+for t in test:
+    lop.append(t)
+"""
 lop = set(lop)
 raw_vars = set()
-print("Generated below are all of the provable tagfacts when given your premises:")
 non_flag = False
 i = 0
 for prem in lop:
@@ -107,18 +97,9 @@ for prem in lop:
 database = Database(universe, set(tf), verbs, meaning)
 engine = Engine(rules, database, None)
 provables = engine.provable_tf()
-for tf in provables:
-    t, v1, v2 = tf
-    nv1 = meaning[v1]
-    nv2 = meaning[v2]
-    if t == 'a':
-        t = "all "
-    elif t == "i":
-        t = "some "
-    print(t + nv1 + " are " + nv2)
 # have to fix by maintaining condition that target is in dict, double check w rules
 # code pertaining to translating the target
-target = input("\nEnter a target\n")
+target = input("Enter a target\n")
 ttag, tw1, _, tw2 = target.split()
 try:
     ind1 = [ind for ind, word in meaning.items() if word == tw1]
@@ -130,12 +111,21 @@ try:
 except:
     print("No proof can be generated")
 
-print("")
 engine = Engine(rules, database, target)
+lopn = map(lambda x: [x[1], x[2]], provables)
+yep = countermodel(target, provables, lopn, engine.database.meaning.keys(), engine.database.meaning, engine.database.universe)
+for i in yep:
+    print(i)
 
-engine.gen_tf(extraction)
-print("\n\n")
-print(engine.pretty_print(extraction))
+"""
+Test on
+all a z
+all z a
+all a non-b
+all c b
+all non-c d
+some non-b non-a
+some non-c b
 
-engine.gen_tf()
-
+target is all d non-c
+"""
