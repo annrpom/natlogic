@@ -197,14 +197,15 @@ class Engine:
         # TagFacts -> String
         # Not considering all tags. Extend as needed
         def nodeStr(node):
-            tag    = "All " if node[0] == 'a' else "I "
-            first  = myDict[node[1]] if isinstance(node[1],int) else node[1]
-            second = myDict[node[2]] if isinstance(node[2],int) else node[2]
-            return tag + first + " " + second
+            tag = "All " if node[0] == 'a' else "Some "
+            first = myDict[node[1]] if isinstance(node[1], int) else node[1]
+            second = myDict[node[2]] if isinstance(node[2], int) else node[2]
+            return tag + first + " are " + second
+
         def pretty_print_internal(node):
-            sub      = ans[node]
-            rule     = "given" if not sub else sub[0]
-            parents  = [] if not sub else sub[1]
+            sub = ans[node]
+            rule = "given" if not sub else sub[0]
+            parents = [] if not sub else sub[1]
             subtrees = TextImage("")
             nodeStrg = nodeStr(node)
             for parent in parents:
@@ -213,12 +214,13 @@ class Engine:
             # * the root
             # * the sub-proofs
             # so, need a tiny `if` to make this look pretty
-            if(subtrees.width > len(nodeStrg)):
-                bar_rule = "-" * (subtrees.width + 2)
-                return subtrees.aboveStr(bar_rule).aboveStr(nodeStrg).beside(TextImage([rule,""]),1)
+            if subtrees.width > len(nodeStrg):
+                bar_rule = "─" * (subtrees.width + 2)
+                return subtrees.aboveStr(bar_rule).aboveStr(nodeStrg).beside(TextImage([rule, ""]), 1)
             else:
-                bar_rule = "-" * (len(nodeStrg) + 2)
-                return subtrees.above(TextImage(bar_rule).aboveStr(nodeStrg).beside(TextImage([rule,""]), 1))
+                bar_rule = "─" * (len(nodeStrg) + 2)
+                return subtrees.above(TextImage(bar_rule).aboveStr(nodeStrg).beside(TextImage([rule, ""]), 1))
+
         return str(pretty_print_internal(self.target))
 
     # generate tag_facts until cannot, stops when prev size is == to curr size of database
@@ -229,14 +231,14 @@ class Engine:
                 generated = rule.apply(self.database)  # this produces a [ListOf ProofTrees]
                 self.database.lot.update(generated)
                 if self.target in ans.keys():
-                    print("Proof was found!")
+                    #print("Proof was found!")
+                    print("The following is a formal proof:")
                     self.print_proof(self.database.meaning)
                     ans.clear()
                     return
             if self.size == self.database.size():
                 print("Nothing was found")
                 return False
-        ans.clear()
 
     def provable_tf(self):
         provables = []

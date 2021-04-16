@@ -133,9 +133,9 @@ except:
 print("")
 engine = Engine(rules, database, target)
 
-engine.gen_tf(extraction)
 print("\n\n")
-print(engine.pretty_print(extraction))
-
+print("The following is a Proof Tree:")
+print(engine.pretty_print(engine.database.meaning))
+print("\n")
 engine.gen_tf()
 
